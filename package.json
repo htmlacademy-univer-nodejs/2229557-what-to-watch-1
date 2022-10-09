@@ -33,6 +33,7 @@
     "npm": "^8.1.0"
   },
   "dependencies": {
-    "chalk": "^5.0.1"
+    "chalk": "^5.0.1",
+    "json-server": "^0.17.0"
   }
 }
