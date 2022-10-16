@@ -5,22 +5,22 @@ export default class MovieGenerator {
     constructor(private readonly mockFilms: MockFilms) {}
 
     public generate(): string {
-        const name = this.GetRandomItem<string>(this.mockFilms.names);
-        const description = this.GetRandomItem<string>(this.mockFilms.descriptions);
+        const name = this.getRandomItem<string>(this.mockFilms.names);
+        const description = this.getRandomItem<string>(this.mockFilms.descriptions);
         const postDate = new Date();
-        const genre = <Genre>this.GetRandomItem(this.mockFilms.genres);
-        const releaseYear = this.GetRandomItem<number>(this.mockFilms.releaseYears);
-        const rating = this.GetRandomItem<number>(this.mockFilms.ratings);;
-        const movie = this.GetRandomItem<string>(this.mockFilms.movies);
-        const actors = this.GetRandomItems<string>(this.mockFilms.actors).join(';');
-        const producer = this.GetRandomItem<string>(this.mockFilms.producers);
-        const movieDuration = this.GetRandomItem(this.mockFilms.movieDurations);
-        const userName = this.GetRandomItem<string>(this.mockFilms.userNames);
-        const userEmail = this.GetRandomItem<string>(this.mockFilms.userEmails);
-        const avatarPath = this.GetRandomItem<string>(this.mockFilms.avatarPaths);
-        const poster = this.GetRandomItem<string>(this.mockFilms.posterPaths);
-        const backgroundImage = this.GetRandomItem<string>(this.mockFilms.backgroundImages);
-        const backgroundColor = this.GetRandomItem<string>(this.mockFilms.backgroundColors);
+        const genre = <Genre>this.getRandomItem(this.mockFilms.genres);
+        const releaseYear = this.getRandomItem<number>(this.mockFilms.releaseYears);
+        const rating = this.getRandomItem<number>(this.mockFilms.ratings);;
+        const movie = this.getRandomItem<string>(this.mockFilms.movies);
+        const actors = this.getRandomItems<string>(this.mockFilms.actors).join(';');
+        const producer = this.getRandomItem<string>(this.mockFilms.producers);
+        const movieDuration = this.getRandomItem(this.mockFilms.movieDurations);
+        const userName = this.getRandomItem<string>(this.mockFilms.userNames);
+        const userEmail = this.getRandomItem<string>(this.mockFilms.userEmails);
+        const avatarPath = this.getRandomItem<string>(this.mockFilms.avatarPaths);
+        const poster = this.getRandomItem<string>(this.mockFilms.posterPaths);
+        const backgroundImage = this.getRandomItem<string>(this.mockFilms.backgroundImages);
+        const backgroundColor = this.getRandomItem<string>(this.mockFilms.backgroundColors);
     
         return [
             name,
@@ -44,15 +44,15 @@ export default class MovieGenerator {
         ].join('\t');
     }
     
-    private GetRandomNumber(min: number, max: number) {
+    private getRandomNumber(min: number, max: number) {
         return Number(((Math.random() * (max - min)) + min).toFixed(0));
     }
-    private GetRandomItems<T>(items: T[]): T[] {
-        const randomPosition = this.GetRandomNumber(0, items.length - 1);
-        return items.slice(randomPosition, randomPosition + this.GetRandomNumber(randomPosition, items.length));
+    private getRandomItems<T>(items: T[]): T[] {
+        const randomPosition = this.getRandomNumber(0, items.length - 1);
+        return items.slice(randomPosition, randomPosition + this.getRandomNumber(randomPosition, items.length));
     };
     
-    private GetRandomItem<T>(items: T[]): T {
-        return items[this.GetRandomNumber(0, items.length - 1)];
+    private getRandomItem<T>(items: T[]): T {
+        return items[this.getRandomNumber(0, items.length - 1)];
     }
 }

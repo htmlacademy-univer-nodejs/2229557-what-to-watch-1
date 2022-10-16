@@ -17,15 +17,7 @@ export default class GenerateCommand implements CliCommandInterface {
         try {
             this.mockFilms = await got.get(url).json();
         } catch(e) {
-            var error = "";
-            
-            if (typeof e === "string") {
-                error = e;
-            } else if (e instanceof Error) {
-                error = e.message;
-            }
-
-            console.log(`Fetch data from ${url} is failed. Error: ${error}`);
+            console.log(`Fetch data from ${url} is failed. Error: ${e.message ?? e}`);
             return
         }
         if (!this.mockFilms) {
@@ -38,7 +30,7 @@ export default class GenerateCommand implements CliCommandInterface {
         const fileWriter = new FileWriter(filepath);
         
         console.log(`Write to file...`)
-        for (var i = 0; i < count; i++) {
+        for (let i = 0; i < count; i++) {
             await fileWriter.write(movieGenerator.generate());
         }
 

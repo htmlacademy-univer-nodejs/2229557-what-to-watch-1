@@ -11,8 +11,8 @@ export default class TSVFileReader extends EventEmitter implements FileReaderInt
 
     public async read(): Promise<void> {
         const stream = createReadStream(this.filename, {encoding: 'utf-8'});
-        var lineRead = '';
-        var endLinePosition = -1;
+        let lineRead = '';
+        let endLinePosition = -1;
 
         for await (const chunk of stream) {
             try {
@@ -23,30 +23,37 @@ export default class TSVFileReader extends EventEmitter implements FileReaderInt
         while ((endLinePosition = lineRead.indexOf('\n')) >= 0) {
             const row = lineRead.slice(0, endLinePosition + 1);
             lineRead = lineRead.slice(++endLinePosition);
-            this.emit('parsedMovie', this.ToMovie(row));
+            this.emit('parsedMovie', this.toMovie(row));
         }
     }
 
-    private ToMovie(str: string): Movie | undefined{
-        if (!str) return;
-        var params = str.split('\\t');
+    private toMovie(str: string): Movie | undefined{
+        if (!str) {
+            return;
+        }
+            
+        const [name, description, postDate, genre,
+            releaseYear, rating, movie, 
+            actors, producer, movieDuration, commentsCount,
+            userName, userEmail, avatarPath, userPassword,
+            poster, backgroundImage, backgroundColor] = str.split('\\t');
 
         return {
-            name: params[0],
-            description: params[1],
-            postDate: new Date(params[2]),
-            genre: <Genre>params[3],
-            releaseYear: Number(params[4]),
-            rating: Number(params[5]),
-            movie: params[6],
-            actors: String(params[7]).split(';'),
-            producer: params[8],
-            movieDuration: Number(params[9]),
-            commentsCount: Number(params[10]),
-            user: {name: params[11], email: params[12], avatarPath: params[13], password: params[14]},
-            poster: params[15],
-            backgroundImage: params[16],
-            backgroundColor: params[17]
+            name,
+            description,
+            postDate: new Date(postDate),
+            genre: <Genre>genre,
+            releaseYear: Number(releaseYear),
+            rating: Number(rating),
+            movie,
+            actors: String(actors).split(';'),
+            producer: producer,
+            movieDuration: Number(movieDuration),
+            commentsCount: Number(commentsCount),
+            user: {name: userName, email: userEmail, avatarPath: avatarPath, password: userPassword},
+            poster,
+            backgroundImage,
+            backgroundColor
             };
     }
 }
