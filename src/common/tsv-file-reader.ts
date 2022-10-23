@@ -25,6 +25,7 @@ export default class TSVFileReader extends EventEmitter implements FileReaderInt
             lineRead = lineRead.slice(++endLinePosition);
             this.emit('parsedMovie', this.toMovie(row));
         }
+        this.emit('complete');
     }
 
     private toMovie(str: string): Movie | undefined{
