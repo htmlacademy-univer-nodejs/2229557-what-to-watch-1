@@ -30,8 +30,8 @@ export default class ImportCommand implements CliCommandInterface {
         this.databaseService = new MongoDBService(this.logger);
     }
 
-    public async execute(filename: string, db_user: string, db_password: string, db_host: string, db_port: string, db_name: string, salt: string): Promise<void> {
-        const uri = `mongodb://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}?authSource=admin`;
+    public async execute(filename: string, dbUser: string, dbPassword: string, dbHost: string, dbPort: string, dbName: string, salt: string): Promise<void> {
+        const uri = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
         this.salt = salt;
         
         await this.databaseService.connect(uri)
@@ -48,13 +48,12 @@ export default class ImportCommand implements CliCommandInterface {
             if (!(err instanceof Error)) {
                 throw err;
             }
-
-            console.log(`Не удалось импортировать данные. ${err.message}`);
+            this.logger.error(`Не удалось импортировать данные. ${err.message}`);
         }
     }
 
     private async onParsedMovie(movie: Movie, resolve: () => void) {
-        console.log(movie);
+        this.logger.debug(`${movie}`);
         const user = await this.userService.findOrCreate({
             ...movie.user
         }, this.salt);

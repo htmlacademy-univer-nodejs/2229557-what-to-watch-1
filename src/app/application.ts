@@ -18,11 +18,11 @@ export default class Application {
   }
 
   private getDbUri(): string {
-    const db_user = this.config.get('DB_USER');
-    const db_password = this.config.get('DB_PASSWORD');
-    const db_host = this.config.get('DB_HOST');
-    const db_port = this.config.get('DB_PORT');
-    const db_name = this.config.get('DB_NAME');
-    return `mongodb://${db_user}:${db_password}@${db_host}:${db_port}/${db_name}?authSource=admin`;
+    const dbUser = this.config.get('DB_USER');
+    const dbPassword = this.config.get('DB_PASSWORD');
+    const dbHost = this.config.get('DB_HOST');
+    const dbPort = this.config.get('DB_PORT');
+    const dbName = this.config.get('DB_NAME');
+    return `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
   }
 }
