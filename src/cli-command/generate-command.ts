@@ -1,39 +1,37 @@
-import MovieGenerator from '../common/movie-generator.js';
-import FileWriter from '../common/file-writer.js';
-import {MockFilms} from '../types/mock-films.type.js';
-import {CliCommandInterface} from './cli-command.interface.js';
 import got from 'got';
+import {ICliCommand} from './cli-command.interface.js';
+import { ILogger } from '../common/logger/logger-interface.js';
+import { TMockFilm } from '../models/mock-film-type.js';
+import TSVFileWriter from '../common/file-writer/film-tsv-file-writer.js';
+import FilmGenerator from '../common/film-generator/film-generator.js';
+import LoggerService from '../common/logger/logger.js';
 
-export default class GenerateCommand implements CliCommandInterface {
-    public readonly name = '--generate';
-    private mockFilms?: MockFilms;
+export default class GenerateCommand implements ICliCommand {
+  public readonly name = '--generate';
+  private initialData!: TMockFilm;
+  private readonly logger: ILogger;
 
-    public async execute(...parameters:string[]): Promise<void> {
-        const count = parseInt(parameters[0], 10);
-        const filepath = parameters[1];
-        const url = parameters[2];
+  constructor() {
+    this.logger = new LoggerService();
+  }
 
-        console.log(`Start fetch data from ${url}..`)
-        try {
-            this.mockFilms = await got.get(url).json();
-        } catch(e) {
-            console.log(`Fetch data from ${url} is failed. Error: ${e.message ?? e}`);
-            return
-        }
-        if (!this.mockFilms) {
-            console.log(`Fetched data is empty.`);
-            return
-        }
+  public async execute(...parameters:string[]): Promise<void> {
+    const [count, filepath, url] = parameters;
+    const offerCount = Number.parseInt(count, 10);
 
-        console.log(`Generate movie string...`)
-        const movieGenerator = new MovieGenerator(this.mockFilms);
-        const fileWriter = new FileWriter(filepath);
-        
-        console.log(`Write to file...`)
-        for (let i = 0; i < count; i++) {
-            await fileWriter.write(movieGenerator.generate());
-        }
-
-        console.log(`File ${filepath} was created!`);
+    try {
+      this.initialData = await got.get(url).json();
+    } catch {
+      return this.logger.error(`Can't fetch data from ${url}.`);
     }
+
+    const offerGeneratorString = new FilmGenerator(this.initialData);
+    const tsvFileWriter = new TSVFileWriter(filepath);
+
+    for (let i = 0; i < offerCount; i++) {
+      await tsvFileWriter.write(offerGeneratorString.generate());
+    }
+
+    this.logger.info(`File ${filepath} created!`);
+  }
 }

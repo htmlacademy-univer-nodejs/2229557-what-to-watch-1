@@ -7,7 +7,7 @@ info:
 tags:
   - name: users
     description: Действия с пользователем.
-  - name: movies
+  - name: films
     description: Действия с фильмами.
   - name: comments
     description: Действия с комментариями.
@@ -58,7 +58,7 @@ paths:
               properties:
                 login:
                   type: string
-                  example: dashav@mail.ru
+                  example: admin@mail.ru
 
                 password:
                   type: string
@@ -122,10 +122,10 @@ paths:
           description: Неверный токен. Завершение пользовательского сеанса невозможно.
 
 
-  /movies/create:
+  /films/create:
     post:
       tags:
-        - movies
+        - films
       summary: Добавление нового фильма
       description: Добавляет новый фильм.
 
@@ -134,7 +134,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/createMovie'
+              $ref: '#/components/schemas/createFilm'
         required: true
 
       responses:
@@ -143,27 +143,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/movie'
+                $ref: '#/components/schemas/film'
 
         "400":
           description: Не удалось обработать запрос, так как он представлен в неправильном формате или является некорректным.
 
 
-  /movies/{movieId}:
+  /films/{filmId}:
     get:
       tags:
-        - movies
+        - films
       summary: Получение детальной информации по фильму
       description: Получает детальную информацию по определенному фильму.
 
       parameters:
         - in: path
-          name: movieId
+          name: filmId
           schema:
             type: string
             format: uuid
           required: true
-          description: Movie id to get.
+          description: Film id to get.
 
       responses:
         "200":
@@ -171,32 +171,32 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/movie'
+                $ref: '#/components/schemas/film'
 
         "404":
           description: Фильма с данным id не существует.
 
     patch:
       tags:
-        - movies
+        - films
       summary: Редактирование карточки фильма
       description: Редактирует карточку фильма, созданную пользователем.
 
       parameters:
         - in: path
-          name: movieId
+          name: filmId
           schema:
             type: string
             format: uuid
           required: true
-          description: Movie id to update.
+          description: Film id to update.
 
       requestBody:
         description: Полный набор информации и идентификатор редактируемого фильма.
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updateMovie'
+              $ref: '#/components/schemas/updateFilm'
         required: true
 
       responses:
@@ -205,7 +205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/movie'
+                $ref: '#/components/schemas/film'
 
         "400":
           description: Не удалось обработать запрос, так как он представлен в неправильном формате или является некорректным.
@@ -216,18 +216,18 @@ paths:
 
     delete:
       tags:
-        - movies
+        - films
       summary: Удаление карточки фильма
       description: Удаляет карточку фильма, созданную пользователем
 
       parameters:
         - in: path
-          name: movieId
+          name: filmId
           schema:
             type: string
             format: uuid
           required: true
-          description: Movie id to delete.
+          description: Film id to delete.
 
       requestBody:
         description: Id пользователя, пытающегося удалить фильм.
@@ -251,10 +251,10 @@ paths:
         "404":
           description: Фильма с данным id не существует.
 
-  /movies?limit=60&genre=comedy:
+  /films?limit=60&genre=comedy:
     get:
       tags:
-        - movies
+        - films
       summary: Получение списка фильмов
       description: Возвращает список фильмов (по умолчанию не больше 60).
 
@@ -280,16 +280,16 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/movieListItem'
+                  $ref: '#/components/schemas/filmListItem'
 
         "400":
           description: Не удалось обработать запрос, так как он представлен в неправильном формате или является некорректным.
 
 
-  /movies/promo:
+  /films/promo:
     get:
       tags:
-        - movies
+        - films
       summary: Получение промо-фильма
       description: Получение детальной информации по промо фильму.
 
@@ -299,13 +299,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/movie'
+                $ref: '#/components/schemas/film'
 
 
-  /movies/to_watch:
+  /films/to_watch:
     get:
       tags:
-        - movies
+        - films
       summary: Получить список фильмов «К просмотру»
       description: Возвращает список фильмов, добавленных к просмотру
 
@@ -332,7 +332,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/movieListItem'
+                  $ref: '#/components/schemas/filmListItem'
 
         "401":
           description: Пользователь не авторизован. Запрос отклонен.
@@ -340,7 +340,7 @@ paths:
 
     post:
       tags:
-        - movies
+        - films
       summary: Добавить фильм в список "К просмотру"
       description: Добавляет фильм в список "К просмотру"
 
@@ -357,14 +357,14 @@ paths:
                   format: uuid
                   example: 6329c3d6a04ab1061c6425ea
 
-                movieId:
+                filmId:
                   type: string
                   format: uuid
                   example: 6329c3d6a04ab1061c6425ease8u342
 
               required:
                 - userId
-                - movieId
+                - filmId
 
       responses:
         "201":
@@ -376,7 +376,7 @@ paths:
 
     delete:
       tags:
-        - movies
+        - films
       summary: Удалить фильм из списка "К просмотру"
       description: Удаляет фильм из списка "К просмотру"
 
@@ -393,14 +393,14 @@ paths:
                   format: uuid
                   example: 6329c3d6a04ab1061c6425ea
 
-                movieId:
+                filmId:
                   type: string
                   format: uuid
                   example: 6329c3d6a04ab1061c6425ease8u342
 
               required:
                 - userId
-                - movieId
+                - filmId
 
       responses:
         "204":
@@ -410,7 +410,7 @@ paths:
           description: Пользователь не авторизован. Запрос отклонен.
 
 
-  /movies/{movieId}/comments:
+  /films/{filmId}/comments:
     get:
       tags:
         - comments
@@ -419,12 +419,12 @@ paths:
 
       parameters:
         - in: path
-          name: movieId
+          name: filmId
           schema:
             type: string
             format: uuid
           required: true
-          description: Movie id to get comments.
+          description: Film id to get comments.
 
       responses:
         "200":
@@ -456,12 +456,12 @@ paths:
                 - $ref: '#/components/schemas/comment'
                 - type: object
                   properties:
-                    movieId:
+                    filmId:
                       type: string
                       format: uuid
                       example: 6329c3d6a04ab1061c6425ea
                   required:
-                    - movieId
+                    - filmId
 
       responses:
         "200":
@@ -489,11 +489,11 @@ components:
       properties:
         email:
           type: string
-          example: dashav@mail.ru
+          example: yana@mail.ru
 
         name:
           type: string
-          example: Darya
+          example: Yana
 
         password:
           type: string
@@ -510,9 +510,9 @@ components:
 
         email:
           type: string
-          example: dashav@mail.ru
+          example: yana@mail.ru
 
-    createMovie:
+    createFilm:
       type: object
 
       properties:
@@ -549,7 +549,7 @@ components:
           format: url
           example: https://www.what-to-watch.ru/hunger_games_preview
 
-        moviePath:
+        filmPath:
           type: string
           format: url
           example: https://www.what-to-watch.ru/hunger_games
@@ -600,7 +600,7 @@ components:
         - genre
         - releaseYear
         - previewPath
-        - moviePath
+        - filmPath
         - actors
         - director
         - durationInMinutes
@@ -609,7 +609,7 @@ components:
         - backgroundImagePath
         - backgroundColor
 
-    movie:
+    film:
       type: object
 
       properties:
@@ -652,7 +652,7 @@ components:
           format: url
           example: https://www.what-to-watch.ru/hunger_games_preview
 
-        moviePath:
+        filmPath:
           type: string
           format: url
           example: https://www.what-to-watch.ru/hunger_games
@@ -708,7 +708,7 @@ components:
         - releaseYear
         - rating
         - previewPath
-        - moviePath
+        - filmPath
         - actors
         - director
         - durationInMinutes
@@ -718,20 +718,20 @@ components:
         - backgroundImagePath
         - backgroundColor
 
-    updateMovie:
+    updateFilm:
       allOf:
-        - $ref: '#/components/schemas/createMovie'
+        - $ref: '#/components/schemas/createFilm'
         - type: object
           properties:
-            movieId:
+            filmId:
               type: string
               format: uuid
               example: 6329c3d6a04ab1061c6425ea
           required:
-            - movieId
+            - filmId
 
 
-    movieListItem:
+    filmListItem:
       type: object
 
       properties:

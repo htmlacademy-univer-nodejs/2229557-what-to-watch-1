@@ -1,17 +1,24 @@
-import { readFileSync } from 'fs';
-import { CliCommandInterface } from './cli-command.interface.js';
+import { ICliCommand} from './cli-command.interface.js';
+import {readFileSync} from 'fs';
+import chalk from 'chalk';
+import { ILogger } from '../common/logger/logger-interface.js';
+import LoggerService from '../common/logger/logger.js';
 
-export default class VersionCommand implements CliCommandInterface {
-    public readonly name = '--version';
+export default class VersionCommand implements ICliCommand {
+  public readonly name = '--version';
+  private readonly logger: ILogger;
 
-    private readVersion(): string {
-        const contentPageJSON = readFileSync('./package.json', 'utf-8');
-        const content = JSON.parse(contentPageJSON);
-        return content.version;
-    }
+  constructor() {
+    this.logger = new LoggerService();
+  }
 
-    public async execute() {
-        const version = this.readVersion();
-        console.log(version);
-    }
+  private getVersion(): string {
+    const content = JSON.parse(readFileSync('./package.json','utf-8'));
+    return content.version;
+  }
+
+  public async execute() {
+    const version = this.getVersion();
+    this.logger.info(chalk.greenBright(chalk.bgGrey(version)));
+  }
 }
