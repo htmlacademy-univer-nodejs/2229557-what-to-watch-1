@@ -15,43 +15,43 @@ export type ConfigSchema = {
 
 export const configSchema = convict<ConfigSchema>({
   PORT: {
-    doc: 'Port for incoming connections',
+    doc: 'Port',
     format: 'port',
     env: 'PORT',
     default: 4000
   },
   SALT: {
-    doc: 'Salt for password hash',
+    doc: 'Salt',
     format: String,
     env: 'SALT',
     default: null
   },
   DB_HOST: {
-    doc: 'IP address of the database server (MongoDB)',
+    doc: 'IP',
     format: 'ipaddress',
     env: 'DB_HOST',
     default: '127.0.0.1'
   },
   DB_USER: {
-    doc: 'Username to connect to the database (MongoDB)',
+    doc: 'Username',
     format: String,
     env: 'DB_USER',
     default: null,
   },
   DB_PASSWORD: {
-    doc: 'Database connection password (MongoDB)',
+    doc: 'Database',
     format: String,
     env: 'DB_PASSWORD',
     default: null,
   },
   DB_PORT: {
-    doc: 'Port to connect to the database (MongoDB)',
+    doc: 'Port db',
     format: 'port',
     env: 'DB_PORT',
     default: 27017,
   },
   DB_NAME: {
-    doc: 'Database name (MongoDB)',
+    doc: 'Database name',
     format: String,
     env: 'DB_NAME',
     default: 'course-nodejs-restapi'
