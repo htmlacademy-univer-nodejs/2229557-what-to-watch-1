@@ -1,28 +1,30 @@
-import {LoggerInterface} from '../common/logger/logger.interface.js';
+import 'reflect-metadata';
 import {inject, injectable} from 'inversify';
-import {COMPONENT} from '../types/component.type.js';
-import { ConfigInterface } from '../common/config/config.interface.js';
-import {DatabaseInterface} from '../common/db-client/db-client.interface.js';
+import {ILogger} from '../common/logger/logger-interface.js';
+import {IConfig} from '../common/config/config-interface.js';
+import {Component} from '../models/component.js';
+import {IDatabase} from '../common/database-client/databse-interface.js';
+import {getURI} from '../utils/db-helper.js';
 
 @injectable()
 export default class Application {
-  constructor(@inject(COMPONENT.LoggerInterface) private logger: LoggerInterface,
-              @inject(COMPONENT.ConfigInterface) private config: ConfigInterface,
-              @inject(COMPONENT.DatabaseInterface) private dbClient: DatabaseInterface) {}
+  constructor(
+    @inject(Component.ILogger) private logger: ILogger,
+    @inject(Component.IConfig) private config: IConfig,
+    @inject(Component.IDatabase) private databaseClient: IDatabase
+  ){}
 
-  async init() {
-    const port = this.config.get("PORT");
+  public async init() {
+    this.logger.info('Application initialization…');
+    this.logger.info(`Get value from env $PORT: ${this.config.get('PORT')}`);
 
-    await this.dbClient.connect(this.getDbUri());
-    this.logger.info(`Application is initialized. Port: ${port}.`);
-  }
+    const uri = getURI(
+      this.config.get('DB_USER'),
+      this.config.get('DB_PASSWORD'),
+      this.config.get('DB_HOST'),
+      this.config.get('DB_NAME'),
+    );
 
-  private getDbUri(): string {
-    const dbUser = this.config.get('DB_USER');
-    const dbPassword = this.config.get('DB_PASSWORD');
-    const dbHost = this.config.get('DB_HOST');
-    const dbPort = this.config.get('DB_PORT');
-    const dbName = this.config.get('DB_NAME');
-    return `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
+    await this.databaseClient.connect(uri);
   }
 }

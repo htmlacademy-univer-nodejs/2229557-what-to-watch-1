@@ -1,4 +1,4 @@
-export interface CliCommandInterface {
-    readonly name: string; 
-    execute(...parameters: string[]): void;
+export interface ICliCommand {
+  readonly name: string;
+  execute(...parameters: string[]): void;
 }
