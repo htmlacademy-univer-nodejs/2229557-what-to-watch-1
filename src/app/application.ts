@@ -5,14 +5,20 @@ import {IConfig} from '../common/config/config-interface.js';
 import {Component} from '../models/component.js';
 import {IDatabase} from '../common/database-client/databse-interface.js';
 import {getURI} from '../utils/db-helper.js';
+import express, { Express } from 'express';
 
 @injectable()
 export default class Application {
+
+  private expressApp: Express;
+
   constructor(
     @inject(Component.ILogger) private logger: ILogger,
     @inject(Component.IConfig) private config: IConfig,
     @inject(Component.IDatabase) private databaseClient: IDatabase
-  ){}
+  ){
+    this.expressApp = express();
+  }
 
   public async init() {
     this.logger.info('Application initialization…');
@@ -26,5 +32,8 @@ export default class Application {
     );
 
     await this.databaseClient.connect(uri);
+    let port = this.config.get('PORT');
+    this.expressApp.listen(port);
+    this.logger.info(`Server started on port ${port}`)
   }
 }
