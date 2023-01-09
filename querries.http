@@ -1,0 +1,91 @@
+# Пользователи
+## Регистрация пользователя
+
+POST http://localhost:1234/users/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "test@amil.ru",
+  "avatarPath": "torrance.png",
+  "firstname": "Jack",
+  "lastname": "Torrance",
+  "password": "shining"
+}
+
+###
+
+## Авторизация пользователя
+
+POST http://localhost:1234/users/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "test@amil.ru",
+  "password": "123456"
+}
+
+###
+
+## Выход пользователя
+
+POST http://localhost:1234/users/logout HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "test@amil.ru"
+}
+
+###
+
+# Фильмы
+
+## Создание
+
+POST http://localhost:1234/films/create HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Film",
+  "description": "Film description",
+  "publicationDate": "2022",
+  "genre": "comedy",
+  "releaseYear": 2022,
+  "rating": 9.7,
+  "previewLink": "dsvnjkv",
+  "link": "link",
+  "actors": [],
+  "producer": "producer",
+  "durationInMinutes": 130,
+  "userId": "0",
+  "posterLink": "",
+  "backgroundImageLink": "",
+  "backgroundColor": ""
+}
+
+###
+
+## Редактирование
+
+POST http://localhost:1234/films/update HTTP/1.1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "title": "Film updated",
+  "description": "Film description",
+  "publicationDate": "2023",
+  "genre": "comedy",
+  "releaseYear": 2022,
+  "rating": 9.7,
+  "previewLink": "dsvnjkv",
+  "link": "link",
+  "actors": [],
+  "producer": "producer",
+  "durationInMinutes": 130,
+  "userId": "0",
+  "posterLink": "",
+  "backgroundImageLink": "",
+  "backgroundColor": ""
+}
+
+###

@@ -1,11 +1,13 @@
 import 'reflect-metadata';
+import express, { Express } from 'express';
 import {inject, injectable} from 'inversify';
 import {ILogger} from '../common/logger/logger-interface.js';
 import {IConfig} from '../common/config/config-interface.js';
 import {Component} from '../models/component.js';
 import {IDatabase} from '../common/database-client/databse-interface.js';
 import {getURI} from '../utils/db-helper.js';
-import express, { Express } from 'express';
+import {IController} from '../common/controller/controller-interface.js';
+import {IExceptionFilter} from '../common/errors/exception-filter/exception-filter-interface.js';
 
 @injectable()
 export default class Application {
@@ -15,7 +17,10 @@ export default class Application {
   constructor(
     @inject(Component.ILogger) private logger: ILogger,
     @inject(Component.IConfig) private config: IConfig,
-    @inject(Component.IDatabase) private databaseClient: IDatabase
+    @inject(Component.IDatabase) private databaseClient: IDatabase,
+    @inject(Component.FilmController) private filmController: IController,
+    @inject(Component.IExceptionFilter) private exceptionFilter: IExceptionFilter,
+    @inject(Component.UserController) private userController: IController,
   ){
     this.expressApp = express();
   }
@@ -32,8 +37,25 @@ export default class Application {
     );
 
     await this.databaseClient.connect(uri);
+
+    this.initMiddleware();
+    this.initRoutes();
+    this.initExceptionFilters();
     let port = this.config.get('PORT');
     this.expressApp.listen(port);
     this.logger.info(`Server started on port ${port}`)
+  }
+
+  public initRoutes() {
+    this.expressApp.use('/films', this.filmController.router);
+    this.expressApp.use('/users', this.userController.router);
+  }
+
+  public initMiddleware() {
+    this.expressApp.use(express.json());
+  }
+
+  public initExceptionFilters() {
+    this.expressApp.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
   }
 }
