@@ -1,4 +1,4 @@
-export type TMockData = {
+export type TMockFilm = {
   titles: string[];
   descriptions: string[];
   publishDates: Date[];
