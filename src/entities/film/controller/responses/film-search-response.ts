@@ -1,5 +1,5 @@
 import {Expose} from 'class-transformer';
-import {Film} from '../../film';
+import {Film} from '../../film.js';
 
 export default class FilmSearchResponse {
   @Expose()

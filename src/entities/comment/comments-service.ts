@@ -3,8 +3,8 @@ import {types} from '@typegoose/typegoose';
 import {DocumentType} from '@typegoose/typegoose/lib/types.js';
 import {ICommentService} from './comments-service-interface.js';
 import {CommentEntity} from './db-comment.js';
-import CreateCommentDto from './dto/create-comment-dto.js';
-import {IFilmService} from '../film/service/film-service-interface';
+import CreateCommentDto from './dto/comment-create-dto.js';
+import {IFilmService} from '../film/service/film-service-interface.js';
 import {Component} from '../../models/component.js';
 
 @injectable()

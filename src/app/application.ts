@@ -21,6 +21,7 @@ export default class Application {
     @inject(Component.FilmController) private filmController: IController,
     @inject(Component.IExceptionFilter) private exceptionFilter: IExceptionFilter,
     @inject(Component.UserController) private userController: IController,
+    @inject(Component.CommentController) private commentController: IController,
   ){
     this.expressApp = express();
   }
@@ -41,14 +42,15 @@ export default class Application {
     this.initMiddleware();
     this.initRoutes();
     this.initExceptionFilters();
-    let port = this.config.get('PORT');
+    const port = this.config.get('PORT');
     this.expressApp.listen(port);
-    this.logger.info(`Server started on port ${port}`)
+    this.logger.info(`Server started on port ${port}`);
   }
 
   public initRoutes() {
     this.expressApp.use('/films', this.filmController.router);
     this.expressApp.use('/users', this.userController.router);
+    this.expressApp.use('/comments', this.commentController.router);
   }
 
   public initMiddleware() {
@@ -57,5 +59,6 @@ export default class Application {
 
   public initExceptionFilters() {
     this.expressApp.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+    this.expressApp.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
   }
 }
