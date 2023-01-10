@@ -84,4 +84,8 @@ export default class FilmService implements IFilmService {
       rating: (oldRating * oldCommentsCount + newRating) / (oldCommentsCount + 1)
     });
   }
+
+  async exists(documentId: string): Promise<boolean> {
+    return (this.filmModel.exists({_id: documentId})) !== null;
+  }
 }

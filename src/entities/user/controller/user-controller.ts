@@ -13,6 +13,7 @@ import UserResponse from './response/user-response.js';
 import HttpError from '../../../common/errors/http-error.js';
 import LoginUserDto from '../dto/user-login-dto.js';
 import LogoutUserDto from '../dto/user-logout-dto.js';
+import {ValidateDtoMiddleware} from '../../../common/middleware/validate-dto-middleware/validate-dto-middleware.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -25,8 +26,20 @@ export default class UserController extends Controller {
     this.logger.info('Register routes for UserController…');
 
     this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
-    this.addRoute({path: '/login', method: HttpMethod.Post, handler: this.login});
-    this.addRoute({path: '/logout', method: HttpMethod.Post, handler: this.logout});
+
+    this.addRoute({
+      path: '/register',
+      method: HttpMethod.Post,
+      handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+    });
+
+    this.addRoute({
+      path: '/login',
+      method: HttpMethod.Post,
+      handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
+    });
   }
 
   public async create(
@@ -73,7 +86,7 @@ export default class UserController extends Controller {
   }
 
   public async logout(
-    {body}: Request<Record<string, unknown>, Record<string, unknown>, LogoutUserDto>,
+    {}: Request<Record<string, unknown>, Record<string, unknown>, LogoutUserDto>,
     _res: Response,
   ): Promise<void> {
     throw new HttpError(
