@@ -12,7 +12,7 @@ import {fillDTO} from '../../../utils/common.js';
 import UserResponse from './response/user-response.js';
 import HttpError from '../../../common/errors/http-error.js';
 import LoginUserDto from '../dto/user-login-dto.js';
-import LogoutUserDto from '../dto/user-logout-dto.js'
+import LogoutUserDto from '../dto/user-logout-dto.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -26,7 +26,7 @@ export default class UserController extends Controller {
 
     this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
     this.addRoute({path: '/login', method: HttpMethod.Post, handler: this.login});
-    this.addRoute({path: '/logout', method: HttpMethod.Post, handler: this.logout})
+    this.addRoute({path: '/logout', method: HttpMethod.Post, handler: this.logout});
   }
 
   public async create(
@@ -76,7 +76,6 @@ export default class UserController extends Controller {
     {body}: Request<Record<string, unknown>, Record<string, unknown>, LogoutUserDto>,
     _res: Response,
   ): Promise<void> {
-    console.log(body)
     throw new HttpError(
       StatusCodes.NOT_IMPLEMENTED,
       'Not implemented',

@@ -2,9 +2,9 @@ import {injectable} from 'inversify';
 import { Response, Router} from 'express';
 import {StatusCodes} from 'http-status-codes';
 import asyncHandler from 'express-async-handler';
-import {ILogger} from '../logger/logger-interface';
-import {IController} from './controller-interface';
-import {IRoute} from '../route/route-interface';
+import {ILogger} from '../logger/logger-interface.js';
+import {IController} from './controller-interface.js';
+import {IRoute} from '../route/route-interface.js';
 
 @injectable()
 export abstract class Controller implements IController {

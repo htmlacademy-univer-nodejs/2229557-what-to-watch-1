@@ -3,9 +3,9 @@ import { DocumentType, types } from '@typegoose/typegoose';
 import {Component} from '../../../models/component.js';
 import {IFilmService} from './film-service-interface.js';
 import {FilmEntity} from '../db-film.js';
-import {ILogger} from '../../../common/logger/logger-interface';
-import UpdateFilmDto from '../dto/film-update-dto';
-import CreateFilmDto from '../dto/film-create-dto';
+import {ILogger} from '../../../common/logger/logger-interface.js';
+import UpdateFilmDto from '../dto/film-update-dto.js';
+import CreateFilmDto from '../dto/film-create-dto.js';
 
 const MAX_FILMS_COUNT = 60;
 

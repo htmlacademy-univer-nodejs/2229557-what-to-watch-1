@@ -41,9 +41,9 @@ export default class Application {
     this.initMiddleware();
     this.initRoutes();
     this.initExceptionFilters();
-    let port = this.config.get('PORT');
+    const port = this.config.get('PORT');
     this.expressApp.listen(port);
-    this.logger.info(`Server started on port ${port}`)
+    this.logger.info(`Server started on port ${port}`);
   }
 
   public initRoutes() {

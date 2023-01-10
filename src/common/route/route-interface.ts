@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from 'express';
-import {HttpMethod} from '../../models/http-method';
+import {HttpMethod} from '../../models/http-method.js';
 
 export interface IRoute {
   path: string;

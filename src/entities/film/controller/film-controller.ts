@@ -54,7 +54,7 @@ export default class FilmController extends Controller {
       );
     }
     const result = await this.filmsService.create(body);
-    this.created(res, fillDTO(FilmResponse, result))
+    this.created(res, fillDTO(FilmResponse, result));
   }
 
   public async update(
@@ -72,7 +72,7 @@ export default class FilmController extends Controller {
     }
 
     const result = await this.filmsService.update(body);
-    this.ok(res, fillDTO(FilmResponse, result))
+    this.ok(res, fillDTO(FilmResponse, result));
   }
 
   public async get(
@@ -117,7 +117,7 @@ export default class FilmController extends Controller {
     if (!limit) {
       limit = MAX_FILMS_COUNT.toString();
     }
-    let numberLimit: number = Number(limit);
+    const numberLimit = Number(limit);
     const searchResult = await this.filmsService.findByGenre(params.genre, numberLimit);
 
     this.send(

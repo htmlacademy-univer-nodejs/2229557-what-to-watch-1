@@ -6,7 +6,7 @@ import {Component} from '../../../models/component.js';
 import {IUserService} from './user-service-interface.js';
 import {ILogger} from '../../../common/logger/logger-interface.js';
 import {UserEntity} from '../db-user.js';
-import CreateUserDto from '../dto/user-create-dto';
+import CreateUserDto from '../dto/user-create-dto.js';
 
 @injectable()
 export default class UserService implements IUserService {
