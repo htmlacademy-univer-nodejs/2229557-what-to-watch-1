@@ -18,8 +18,8 @@ export class ValidateObjectIdMiddleware implements IMiddleware {
 
     if (!Types.ObjectId.isValid(objectId)) {
       throw new HttpError(
-        StatusCodes.BAD_REQUEST,
-        'Invalid object Id',
+        StatusCodes.NOT_FOUND,
+        'Not found',
         'ValidateObjectIdMiddleware'
       );
     }
