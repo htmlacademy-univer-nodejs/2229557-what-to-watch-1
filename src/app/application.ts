@@ -8,6 +8,7 @@ import {IDatabase} from '../common/database-client/databse-interface.js';
 import {getURI} from '../utils/db-helper.js';
 import {IController} from '../common/controller/controller-interface.js';
 import {IExceptionFilter} from '../common/errors/exception-filter/exception-filter-interface.js';
+import {AuthenticateMiddleware} from '../common/middleware/auth-middleware/auth-middleware.js';
 
 @injectable()
 export default class Application {
@@ -55,6 +56,8 @@ export default class Application {
 
   public initMiddleware() {
     this.expressApp.use(express.json());
+    const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('SECRET'));
+    this.expressApp.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
   }
 
   public initExceptionFilters() {

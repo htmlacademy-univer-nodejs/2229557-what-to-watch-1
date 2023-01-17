@@ -1,6 +1,7 @@
 import {Genre} from '../../../models/genre.js';
+import CreateFilmDto from './film-create-dto.js';
 
-export default class UpdateFilmDto {
+export default class UpdateFilmDto extends CreateFilmDto{
   public id!: string;
   public title!: string;
   public description!: string;
