@@ -280,7 +280,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/film'
+                  $ref: '#/components/schemas/filmSearchResponse'
 
         "400":
           description: Неверный формат запроса.
@@ -514,13 +514,13 @@ components:
           type: string
           minLength: 2
           maxLength: 100
-          example: Голодные игры
+          example: Один дома 10
 
         description:
           type: string
           minLength: 20
           maxLength: 1024
-          example: Деспотичное государство ежегодно устраивает показательные игры на выживание, за которыми в прямом эфире следит весь мир.
+          example: Малой охраняет дом
 
         publicationDate:
           type: string
@@ -541,12 +541,12 @@ components:
         previewLink:
           type: string
           format: url
-          example: https://www.what-to-watch.ru/hunger_games_preview
+          example: https://www.what-to-watch.ru/preview
 
         link:
           type: string
           format: url
-          example: https://www.what-to-watch.ru/hunger_games
+          example: https://www.what-to-watch.ru/film
 
         actors:
           type: array
@@ -570,13 +570,13 @@ components:
           type: string
           format: uri
           pattern: ([^\s]+(\.jpg)$)
-          example: hunger_games_poster.jpg
+          example: film_poster.jpg
 
         backgroundImageLink:
           type: string
           format: uri
           pattern: ([^\s]+(\.jpg)$)
-          example: hunger_games_bg.jpg
+          example: film_bg.jpg
 
         backgroundColor:
           type: string
@@ -605,13 +605,13 @@ components:
           type: string
           minLength: 2
           maxLength: 100
-          example: Голодные игры
+          example: Один дома 10
 
         description:
           type: string
           minLength: 20
           maxLength: 1024
-          example: Деспотичное государство ежегодно устраивает показательные игры на выживание, за которыми в прямом эфире следит весь мир.
+          example: Малой охраняет дом
 
         publicationDate:
           type: string
@@ -627,23 +627,23 @@ components:
           type: integer
           minimum: 1895
           maximum: 2022
-          example: 2013
+          example: 2010
 
         rating:
           type: integer
           minimum: 0
           maximum: 10
-          example: 5
+          example: 1
 
         previewLink:
           type: string
           format: url
-          example: https://www.what-to-watch.ru/hunger_games_preview
+          example: https://www.what-to-watch.ru/preview
 
         link:
           type: string
           format: url
-          example: https://www.what-to-watch.ru/hunger_games
+          example: https://www.what-to-watch.ru/url
 
         actors:
           type: array
@@ -657,7 +657,7 @@ components:
           type: string
           minLength: 2
           maxLength: 50
-          example: Гэри Росс
+          example: Трокс
 
         durationInMinutes:
           type: number
@@ -676,13 +676,13 @@ components:
           type: string
           format: uri
           pattern: ([^\s]+(\.jpg)$)
-          example: hunger_games_poster.jpg
+          example: film_poster.jpg
 
         backgroundImageLink:
           type: string
           format: uri
           pattern: ([^\s]+(\.jpg)$)
-          example: hunger_games_bg.jpg
+          example: film_bg.jpg
 
         backgroundColor:
           type: string
@@ -727,7 +727,7 @@ components:
           type: string
           minLength: 2
           maxLength: 100
-          example: Голодные игры
+          example: Головоломка
 
         publicationDate:
           type: string
@@ -736,13 +736,13 @@ components:
 
         genre:
           type: string
-          enum: [ comedy, crime, documentary, drama, horror, family, romance, scifi, thriller ]
+          enum: [ crime, comedy,  documentary, drama, horror, family, scifi, romance, thriller ]
           example: comedy
 
         previewLink:
           type: string
           format: url
-          example: https://www.what-to-watch.ru/hunger_games_preview
+          example: https://www.what-to-watch.ru/preview
 
         user:
           $ref: '#/components/schemas/user'
@@ -751,12 +751,12 @@ components:
           type: string
           format: uri
           pattern: ([^\s]+(\.jpg)$)
-          example: hunger_games_poster.jpg
+          example: poster.jpg
 
         commentsCount:
           type: integer
           minimum: 0
-          example: 10
+          example: 1
 
       required:
         - title
@@ -776,13 +776,13 @@ components:
           type: string
           minLength: 5
           maxLength: 1024
-          example: Супер крутой фильм!
+          example: Круто!
 
         rating:
           type: integer
           minimum: 0
           maximum: 10
-          example: 10
+          example: 1
 
 
       required:
