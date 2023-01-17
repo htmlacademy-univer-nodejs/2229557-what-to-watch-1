@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
-import {inject, injectable} from 'inversify';
-import {IDatabase} from './databse-interface.js';
-import {Component} from '../../models/component.js';
-import {ILogger} from '../logger/logger-interface.js';
+import { inject, injectable } from 'inversify';
+
+import { IDatabase } from './databse-interface.js';
+import { Component } from '../../models/component.js';
+import { ILogger } from '../logger/logger-interface.js';
 
 @injectable()
 export default class DatabaseClient implements IDatabase {
@@ -11,9 +12,8 @@ export default class DatabaseClient implements IDatabase {
   ) {}
 
   public async connect(uri: string): Promise<void> {
-    this.logger.info('Connecting to Database.');
     await mongoose.connect(uri);
-    this.logger.info('Conected to Database.');
+    this.logger.info('Database connection opened.');
   }
 
   public async disconnect(): Promise<void> {

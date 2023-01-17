@@ -1,6 +1,8 @@
 import 'reflect-metadata';
+import cors from 'cors';
 import express, { Express } from 'express';
-import {inject, injectable} from 'inversify';
+import { inject, injectable } from 'inversify';
+
 import {ILogger} from '../common/logger/logger-interface.js';
 import {IConfig} from '../common/config/config-interface.js';
 import {Component} from '../models/component.js';
@@ -9,6 +11,7 @@ import {getURI} from '../utils/db-helper.js';
 import {IController} from '../common/controller/controller-interface.js';
 import {IExceptionFilter} from '../common/errors/exception-filter/exception-filter-interface.js';
 import {AuthenticateMiddleware} from '../common/middleware/auth-middleware/auth-middleware.js';
+
 
 @injectable()
 export default class Application {
@@ -58,6 +61,7 @@ export default class Application {
     this.expressApp.use(express.json());
     const authenticateMiddleware = new AuthenticateMiddleware(this.config.get('SECRET'));
     this.expressApp.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
+    this.expressApp.use(cors());
   }
 
   public initExceptionFilters() {

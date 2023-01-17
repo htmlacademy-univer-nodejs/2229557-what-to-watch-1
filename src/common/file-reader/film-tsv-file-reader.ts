@@ -1,6 +1,7 @@
-import {createReadStream } from 'fs';
-import {IFileReader} from './file-reader-interface.js';
 import EventEmitter from 'events';
+import {createReadStream } from 'fs';
+
+import {IFileReader} from './file-reader-interface.js';
 
 export class FilmTsvFileReader extends EventEmitter implements IFileReader {
   constructor(public filePath: string) {

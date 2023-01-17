@@ -1,17 +1,15 @@
-import {Genre} from '../../../models/genre.js';
+import { Genre } from '../../../models/genre.js';
 import {
-    IsArray,
-    IsBoolean,
-    IsDateString,
-    IsEnum,
-    IsInt,
-    IsMongoId,
-    IsString,
-    Length,
-    Matches,
-    Max,
-    Min
-  } from 'class-validator';
+  IsArray,
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsString,
+  Length,
+  Matches,
+  Max,
+  Min
+} from 'class-validator';
 
 export default class CreateFilmDto {
 
@@ -32,8 +30,6 @@ export default class CreateFilmDto {
   @Max(2023, {message: 'Maximum releaseYear is 2022'})
   public releaseYear!: number;
 
-  public rating!: number;
-
   @IsString({message: 'previewLink is required'})
   public previewLink!: string;
 
@@ -50,8 +46,7 @@ export default class CreateFilmDto {
   @Min(0, {message: 'durationInMinutes can not be less than 0'})
   public durationInMinutes!: number;
 
-  @IsMongoId({message: 'userId field must be valid an id'})
-  public userId!: string;
+  public user!: string;
 
   @Matches(/(\S+(\.jpg)$)/, {message: 'Should be .jpg'})
   @IsString({message: 'posterPath is required'})
@@ -64,6 +59,5 @@ export default class CreateFilmDto {
   @IsString({message: 'Required'})
   public backgroundColor!: string;
 
-  @IsBoolean({message: 'Should be boolean'})
   public isPromo?: boolean;
 }

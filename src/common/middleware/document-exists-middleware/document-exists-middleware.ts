@@ -1,8 +1,13 @@
-import {NextFunction, Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
+import {
+  NextFunction,
+  Request,
+  Response} from 'express';
+import { StatusCodes } from 'http-status-codes';
+
+import { IMiddleware } from '../middleware-interface.js';
+import { IDocumentExists } from './document-exists-interface.js';
+
 import HttpError from '../../errors/http-error.js';
-import {IMiddleware} from '../middleware-interface.js';
-import {IDocumentExists} from './document-exists-interface.js';
 
 export class DocumentExistsMiddleware implements IMiddleware {
   constructor(private readonly service: IDocumentExists,

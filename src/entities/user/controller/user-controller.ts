@@ -1,22 +1,22 @@
-import {inject, injectable} from 'inversify';
-import {Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
-import {Component} from '../../../models/component.js';
-import {ILogger} from '../../../common/logger/logger-interface.js';
-import {Controller} from '../../../common/controller/controller.js';
-import {IUserService} from '../service/user-service-interface.js';
-import {IConfig} from '../../../common/config/config-interface.js';
-import {HttpMethod} from '../../../models/http-method.js';
-import CreateUserDto from '../dto/user-create-dto.js';
+import { inject, injectable } from 'inversify';
+import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+
+import { Component } from '../../../models/component.js';
+import { ILogger } from '../../../common/logger/logger-interface.js';
+import { Controller } from '../../../common/controller/controller.js';
+import { IUserService } from '../service/user-service-interface.js';
+import { IConfig } from '../../../common/config/config-interface.js';
+import { HttpMethod } from '../../../models/http-method.js';
 import { fillDTO, createJWT } from '../../../utils/common.js';
+import { ValidateDtoMiddleware } from '../../../common/middleware/validate-dto-middleware/validate-dto-middleware.js';
+import { UploadFileMiddleware } from '../../../common/middleware/upload-file-middleware/upload-file-middleware.js';
+
+import LoggedUserResponse from './response/user-logger-response.js';
+import CreateUserDto from '../dto/user-create-dto.js';
 import UserResponse from './response/user-response.js';
 import HttpError from '../../../common/errors/http-error.js';
 import LoginUserDto from '../dto/user-login-dto.js';
-import LogoutUserDto from '../dto/user-logout-dto.js';
-import {ValidateDtoMiddleware} from '../../../common/middleware/validate-dto-middleware/validate-dto-middleware.js';
-import { ValidateObjectIdMiddleware } from '../../../common/middleware/validate-object-id-middleware/validate-object-id-middleware.js';
-import { UploadFileMiddleware } from '../../../common/middleware/upload-file-middleware/upload-file-middleware.js';
-import LoggedUserResponse from './response/user-logger-response.js';
 
 @injectable()
 export default class UserController extends Controller {
@@ -27,6 +27,12 @@ export default class UserController extends Controller {
   ) {
     super(logger);
     this.logger.info('Register routes for UserController…');
+
+    this.addRoute({
+      path: '/',
+      method: HttpMethod.Get,
+      handler: this.get
+    });
 
     this.addRoute({path: '/register', method: HttpMethod.Post, handler: this.create});
 
@@ -45,30 +51,44 @@ export default class UserController extends Controller {
     });
 
     this.addRoute({
-      path: '/:userId/avatar',
+      path: '/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
-        new ValidateObjectIdMiddleware('userId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar')]
+        new UploadFileMiddleware(this.configService
+          .get('UPLOAD_DIRECTORY'), 'avatar')]
     });
   }
 
-  public async create(
-    {body}: Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>,
-    res: Response,
-  ): Promise<void> {
-    const existsUser = await this.userService.findByEmail(body.email);
-
-    if (existsUser) {
+  async get({ user }: Request, res: Response): Promise<void> {
+    if (!user) {
       throw new HttpError(
-        StatusCodes.CONFLICT,
-        `User with email «${body.email}» exists.`,
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized',
         'UserController'
       );
     }
 
-    const result = await this.userService.create(body, this.configService.get('SALT'));
+    const existsUser = await this.userService.findByEmail(
+      user.email);
+    this.ok(res, fillDTO(LoggedUserResponse, existsUser));
+  }
+
+  public async create(
+    { body }: Request<Record<string, unknown>, Record<string, unknown>, CreateUserDto>,
+    res: Response): Promise<void> {
+    const existsUser = await this.userService.findByEmail(body.email);
+    if (existsUser) {
+      throw new HttpError(
+        StatusCodes.CONFLICT,
+        'User is exists',
+        'UserController'
+      );
+    }
+
+    const result = await this.userService.create(
+      body,
+      this.configService.get('SALT'));
     this.send(
       res,
       StatusCodes.CREATED,
@@ -78,16 +98,15 @@ export default class UserController extends Controller {
 
   public async login(
     {body}: Request<Record<string, unknown>, Record<string, unknown>, LoginUserDto>,
-    _res: Response,
-  ): Promise<void> {
+    _res: Response): Promise<void> {
     const user = await this.userService.verifyUser(
-      body, 
+      body,
       this.configService.get('SALT'));
-    
+
     if (!user) {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
-        `Unauthorized`,
+        'Unauthorized',
         'UserController',
       );
     }
@@ -95,34 +114,36 @@ export default class UserController extends Controller {
     const token = await createJWT(
       'HS256',
       this.configService.get('SECRET'),
-      { ...user }
+      { id: user.id, email: user.email }
     );
     this.ok(
-      _res, 
+      _res,
       fillDTO(
-        LoggedUserResponse, 
+        LoggedUserResponse,
         {email: user?.email, token}));
   }
 
-  public async logout(
-    {}: Request<Record<string, unknown>, Record<string, unknown>, LogoutUserDto>,
-    _res: Response,
-  ): Promise<void> {
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
-    );
-  }
-  
-  public async authCheck(req: Request, res: Response) {
-    const user = await this.userService.findByEmail(req.user.email);
-    this.ok(res, fillDTO(LoggedUserResponse, user));
-  }
-
-  async uploadAvatar(req: Request, res: Response) {
-    this.created(res, {
-      filepath: req.file?.path
-    });
+  async uploadAvatar({ params, user, file }: Request, res: Response) {
+    if (!user) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'UNAUTHORIZED',
+        'UsersController'
+      );
+    }
+    const existsUser = await this.userService.findByEmail(user.email);
+    if (!existsUser) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        'User not found',
+        'UsersController'
+      );
+    }
+    if (file) {
+      await this.userService.setUserAvatarPath(params.userId, file.filename);
+      this.created(res, {
+        avatarPath: file.filename
+      });
+    }
   }
 }

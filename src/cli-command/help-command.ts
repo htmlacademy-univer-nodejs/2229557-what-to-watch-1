@@ -1,8 +1,10 @@
 
 import chalk from 'chalk';
+
 import { ILogger } from '../common/logger/logger-interface.js';
-import LoggerService from '../common/logger/logger.js';
 import {ICliCommand} from './cli-command.interface.js';
+
+import LoggerService from '../common/logger/logger.js';
 
 export default class HelpCommand implements ICliCommand {
   public readonly name = '--help';
@@ -23,7 +25,7 @@ export default class HelpCommand implements ICliCommand {
                 --version:                      # Выводит номер версии
                 --help:                         # Печатает этот текст
                 --import <path>:                # Импортирует данные из TSV
-                --generrtor <n> <path> <url>    # Генерирует произвольное количество тестовых данных
+                --generate <n> <path> <url>    # Генерирует произвольное количество тестовых данных
         `);
 
   }

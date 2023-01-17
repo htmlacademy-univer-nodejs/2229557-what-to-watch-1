@@ -5,14 +5,15 @@ import {IUserService} from '../entities/user/service/user-service-interface.js';
 import {IDatabase} from '../common/database-client/databse-interface.js';
 import {IFilmService} from '../entities/film/service/film-service-interface.js';
 import {ILogger} from '../common/logger/logger-interface.js';
-import FilmService from '../entities/film/service/film-service.js';
 import {FilmModel} from '../entities/film/db-film.js';
-import UserService from '../entities/user/service/user-service.js';
 import {UserModel} from '../entities/user/db-user.js';
+import {Film} from '../models/film.js';
+import {getURI} from '../utils/db-helper.js';
+
 import DatabaseClient from '../common/database-client/database-client.js';
 import LoggerService from '../common/logger/logger.js';
-import {Film} from '../entities/film/film.js';
-import {getURI} from '../utils/db-helper.js';
+import UserService from '../entities/user/service/user-service.js';
+import FilmService from '../entities/film/service/film-service.js';
 
 export default class ImportCommand implements ICliCommand {
   public readonly name = '--import';
@@ -28,7 +29,7 @@ export default class ImportCommand implements ICliCommand {
 
     this.logger = new LoggerService();
     this.filmService = new FilmService(this.logger, FilmModel);
-    this.userService = new UserService(this.logger, UserModel);
+    this.userService = new UserService(this.logger, UserModel, FilmModel);
     this.databaseClient = new DatabaseClient(this.logger);
   }
 
@@ -39,7 +40,7 @@ export default class ImportCommand implements ICliCommand {
     }, this.salt);
     await this.filmService.create({
       ...film,
-      userId: user.id
+      user: user.id
     });
     this.logger.info('save film: ', JSON.stringify(film));
   }

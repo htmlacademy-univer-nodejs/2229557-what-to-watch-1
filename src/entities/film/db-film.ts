@@ -1,4 +1,11 @@
-import typegoose, {defaultClasses, getModelForClass, Ref } from '@typegoose/typegoose';
+import
+typegoose,
+{
+  defaultClasses,
+  getModelForClass,
+  Ref
+} from '@typegoose/typegoose';
+
 import {Genre, GENRE_ARRAY} from '../../models/genre.js';
 import {UserEntity} from '../user/db-user.js';
 
@@ -31,7 +38,10 @@ export class FilmEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public releaseYear!: number;
 
-  @prop({ required: true })
+  @prop({
+    required: true,
+    default: 0
+  })
   public rating!: number;
 
   @prop({ required: false, default: 0 })
@@ -53,7 +63,7 @@ export class FilmEntity extends defaultClasses.TimeStamps {
   public durationInMinutes!: number;
 
   @prop({ ref: UserEntity })
-  public userId!: Ref<UserEntity>;
+  public user!: Ref<UserEntity>;
 
   @prop({ required: true })
   public posterLink!: string;
@@ -63,6 +73,12 @@ export class FilmEntity extends defaultClasses.TimeStamps {
 
   @prop({ required: true })
   public backgroundColor!: string;
+
+  @prop({
+    required: true,
+    default: false
+  })
+  public isPromo?: boolean;
 }
 
 export const FilmModel = getModelForClass(FilmEntity);

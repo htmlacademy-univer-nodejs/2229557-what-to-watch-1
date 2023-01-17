@@ -1,9 +1,14 @@
-import {NextFunction, Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
 import * as jose from 'jose';
+import {
+  NextFunction,
+  Request,
+  Response } from 'express';
+import { TextEncoder } from 'util';
+
+import { StatusCodes } from 'http-status-codes';
+import { IMiddleware } from '../middleware-interface.js';
+
 import HttpError from '../../errors/http-error.js';
-import {IMiddleware} from '../middleware-interface.js';
-import {createSecretKey} from 'crypto';
 
 export class AuthenticateMiddleware implements IMiddleware {
   constructor(private readonly secret: string) {}
@@ -13,18 +18,16 @@ export class AuthenticateMiddleware implements IMiddleware {
     if (!authorizationHeader) {
       return next();
     }
-
     const [, token] = authorizationHeader;
 
     try {
-      const {payload} = await jose.jwtVerify(token, createSecretKey(this.secret, 'utf-8'));
+      const {payload} = await jose.jwtVerify(token, new TextEncoder().encode(this.secret));
       req.user = { email: `${payload.email}`, id: `${payload.id}` };
-
       return next();
     } catch {
 
       return next(new HttpError(
-        StatusCodes.UNAUTHORIZED,
+        StatusCodes.FORBIDDEN,
         'Invalid token',
         'AuthenticateMiddleware')
       );
