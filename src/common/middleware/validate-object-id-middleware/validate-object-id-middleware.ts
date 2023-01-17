@@ -1,6 +1,10 @@
-import {NextFunction, Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
 import mongoose from 'mongoose';
+import { StatusCodes } from 'http-status-codes';
+import {
+  NextFunction,
+  Request,
+  Response} from 'express';
+
 import HttpError from '../../../common/errors/http-error.js';
 import {IMiddleware} from '../middleware-interface.js';
 
@@ -12,14 +16,14 @@ export class ValidateObjectIdMiddleware implements IMiddleware {
   public execute({params}: Request, _res: Response, next: NextFunction): void {
     const objectId = params[this.param];
 
-    if (Types.ObjectId.isValid(objectId)) {
-      return next();
+    if (!Types.ObjectId.isValid(objectId)) {
+      throw new HttpError(
+        StatusCodes.BAD_REQUEST,
+        'Invalid object Id',
+        'ValidateObjectIdMiddleware'
+      );
     }
 
-    throw new HttpError(
-      StatusCodes.BAD_REQUEST,
-      `${objectId} is invalid ObjectID`,
-      'ValidateObjectIdMiddleware'
-    );
+    return next();
   }
 }

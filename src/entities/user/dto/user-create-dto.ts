@@ -1,4 +1,7 @@
-import {IsEmail, IsString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  Length } from 'class-validator';
 
 export default class CreateUserDto {
   @IsEmail({}, {message: 'Email should be valid address'})

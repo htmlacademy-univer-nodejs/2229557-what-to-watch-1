@@ -1,9 +1,11 @@
 import { inject, injectable } from 'inversify';
 import { DocumentType, types } from '@typegoose/typegoose';
-import {Component} from '../../../models/component.js';
-import {IFilmService} from './film-service-interface.js';
-import {FilmEntity} from '../db-film.js';
-import {ILogger} from '../../../common/logger/logger-interface.js';
+
+import { Component } from '../../../models/component.js';
+import { IFilmService } from './film-service-interface.js';
+import { FilmEntity } from '../db-film.js';
+import { ILogger } from '../../../common/logger/logger-interface.js';
+
 import UpdateFilmDto from '../dto/film-update-dto.js';
 import CreateFilmDto from '../dto/film-create-dto.js';
 
@@ -24,11 +26,11 @@ export default class FilmService implements IFilmService {
   }
 
   async findById(filmId: string): Promise<DocumentType<FilmEntity> | null> {
-    return this.filmModel.findById(filmId).exec();
+    return this.filmModel.findById(filmId).populate('user');
   }
 
   async findByName(filmTitle: string): Promise<DocumentType<FilmEntity> | null> {
-    return this.filmModel.findOne({title: filmTitle}).populate('userId');
+    return this.filmModel.findOne({title: filmTitle}).populate('user');
   }
 
   async find(): Promise<DocumentType<FilmEntity>[]> {
@@ -57,7 +59,7 @@ export default class FilmService implements IFilmService {
   }
 
   async update(dto: UpdateFilmDto): Promise<DocumentType<FilmEntity> | null> {
-    return this.filmModel.findByIdAndUpdate(dto.id, dto).populate('userId');
+    return this.filmModel.findByIdAndUpdate(dto.id, dto).populate('user');
   }
 
   async deleteById(filmId: string): Promise<void | null> {
@@ -65,11 +67,11 @@ export default class FilmService implements IFilmService {
   }
 
   async findByGenre(genre: string, limit?: number): Promise<DocumentType<FilmEntity>[]> {
-    return this.filmModel.find({genre}, {}, {limit}).populate('userId');
+    return this.filmModel.find({genre}, {}, {limit}).populate('user');
   }
 
   async findPromo(): Promise<DocumentType<FilmEntity> | null> {
-    return this.filmModel.findOne({isPromo: true}).populate('userId');
+    return this.filmModel.findOne({isPromo: true}).populate('user');
   }
 
   async incCommentsCount(filmId: string): Promise<void | null> {
@@ -77,8 +79,10 @@ export default class FilmService implements IFilmService {
   }
 
   async updateFilmRating(filmId: string, newRating: number): Promise<void | null> {
-    const oldValues = await this.filmModel.findById(filmId).select('rating commentsCount');
-    const oldRating = oldValues?.['rating'] ?? 0;
+    const oldValues = await this.filmModel
+      .findById(filmId)
+      .select('rating commentsCount');
+    const oldRating = oldValues?.['rating'] ?? 1;
     const oldCommentsCount = oldValues?.['commentsCount'] ?? 0;
     return this.filmModel.findByIdAndUpdate(filmId, {
       rating: (oldRating * oldCommentsCount + newRating) / (oldCommentsCount + 1)
@@ -86,6 +90,13 @@ export default class FilmService implements IFilmService {
   }
 
   async exists(documentId: string): Promise<boolean> {
-    return (this.filmModel.exists({_id: documentId})) !== null;
+    return (await this.filmModel.exists({_id: documentId})) !== null;
+  }
+
+  async findByLimit(limit: number): Promise<DocumentType<FilmEntity>[]> {
+    return this.filmModel.find({}, {}, {limit})
+      .sort({publicationDate: -1})
+      .limit(limit)
+      .populate('user');
   }
 }

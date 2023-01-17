@@ -63,7 +63,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyIkX18iOnsiYWN0aXZlUGF0aHMiOnsicGF0a
   "actors": [],
   "producer": "producer",
   "durationInMinutes": 130,
-  "userId": "0",
   "posterLink": "",
   "backgroundImageLink": "",
   "backgroundColor": ""
@@ -89,7 +88,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyIkX18iOnsiYWN0aXZlUGF0aHMiOnsicGF0a
   "actors": [],
   "producer": "producer",
   "durationInMinutes": 130,
-  "userId": "0",
   "posterLink": "",
   "backgroundImageLink": "",
   "backgroundColor": ""

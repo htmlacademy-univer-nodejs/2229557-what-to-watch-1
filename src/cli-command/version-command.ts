@@ -1,7 +1,9 @@
-import { ICliCommand} from './cli-command.interface.js';
-import {readFileSync} from 'fs';
 import chalk from 'chalk';
+import {readFileSync} from 'fs';
+
+import { ICliCommand} from './cli-command.interface.js';
 import { ILogger } from '../common/logger/logger-interface.js';
+
 import LoggerService from '../common/logger/logger.js';
 
 export default class VersionCommand implements ICliCommand {

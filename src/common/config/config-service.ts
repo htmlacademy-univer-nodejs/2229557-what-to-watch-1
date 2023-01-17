@@ -1,5 +1,6 @@
 import {config} from 'dotenv';
 import {inject, injectable} from 'inversify';
+
 import {IConfig} from './config-interface.js';
 import {ILogger} from '../logger/logger-interface.js';
 import {configSchema, ConfigSchema} from './config-schema.js';

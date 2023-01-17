@@ -1,9 +1,13 @@
-import {plainToInstance} from 'class-transformer';
-import {ClassConstructor} from 'class-transformer/types/interfaces/class-constructor.type.js';
-import {validate} from 'class-validator';
-import {NextFunction, Request, Response} from 'express';
-import {StatusCodes} from 'http-status-codes';
-import {IMiddleware} from '../middleware-interface.js';
+import { plainToInstance } from 'class-transformer';
+import { ClassConstructor}  from 'class-transformer/types/interfaces/class-constructor.type.js';
+import { validate } from 'class-validator';
+import { StatusCodes } from 'http-status-codes';
+import {
+  NextFunction,
+  Request,
+  Response} from 'express';
+
+import { IMiddleware } from '../middleware-interface.js';
 
 export class ValidateDtoMiddleware implements IMiddleware {
   constructor(private readonly dto: ClassConstructor<object>) {}
@@ -13,10 +17,11 @@ export class ValidateDtoMiddleware implements IMiddleware {
     const errors = await validate(dtoInstance);
 
     if (errors.length > 0) {
-      res.status(StatusCodes.BAD_REQUEST).send(errors);
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .send(errors);
       return;
     }
-
     next();
   }
 }

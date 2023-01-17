@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
-import {IFilmGenerator} from './film-generator-interface.js';
+
+import { IFilmGenerator } from './film-generator-interface.js';
 import { generateRandomValue, getRandomItem } from '../../utils/random.js';
 import { GENRE_ARRAY } from '../../models/genre.js';
 import { TMockFilm } from '../../models/mock-film-type.js';

@@ -1,11 +1,13 @@
-import {inject, injectable} from 'inversify';
-import {types} from '@typegoose/typegoose';
-import {DocumentType} from '@typegoose/typegoose/lib/types.js';
-import {ICommentService} from './comments-service-interface.js';
-import {CommentEntity} from './db-comment.js';
+import { inject, injectable } from 'inversify';
+import { types } from '@typegoose/typegoose';
+
+import { DocumentType } from '@typegoose/typegoose/lib/types.js';
+import { ICommentService } from './comments-service-interface.js';
+import { CommentEntity } from './db-comment.js';
+import { IFilmService } from '../film/service/film-service-interface.js';
+import { Component } from '../../models/component.js';
+
 import CreateCommentDto from './dto/comment-create-dto.js';
-import {IFilmService} from '../film/service/film-service-interface.js';
-import {Component} from '../../models/component.js';
 
 @injectable()
 export default class CommentService implements ICommentService {
@@ -16,10 +18,17 @@ export default class CommentService implements ICommentService {
     const comment = await this.commentModel.create(dto);
     await this.filmService.updateFilmRating(dto.filmId, dto.rating);
     await this.filmService.incCommentsCount(dto.filmId);
-    return comment.populate('userId');
+    return comment.populate('user');
   }
 
   public async findByFilmId(filmId: string): Promise<DocumentType<CommentEntity>[]> {
-    return this.commentModel.find({filmId}).populate('userId');
+    return await this.commentModel.find({filmId})
+      .sort({createdAt: -1})
+      .limit(60)
+      .populate('user');
+  }
+
+  async deleteByFilmId(filmId: string): Promise<void | null> {
+    await this.commentModel.find({filmId}).deleteMany();
   }
 }

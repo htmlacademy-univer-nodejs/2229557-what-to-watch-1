@@ -1,7 +1,9 @@
 import got from 'got';
-import {ICliCommand} from './cli-command.interface.js';
+
+import { ICliCommand } from './cli-command.interface.js';
 import { ILogger } from '../common/logger/logger-interface.js';
 import { TMockFilm } from '../models/mock-film-type.js';
+
 import TSVFileWriter from '../common/file-writer/film-tsv-file-writer.js';
 import FilmGenerator from '../common/film-generator/film-generator.js';
 import LoggerService from '../common/logger/logger.js';

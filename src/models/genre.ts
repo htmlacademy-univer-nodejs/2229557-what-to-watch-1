@@ -1,13 +1,13 @@
 export enum Genre {
-    Comedy = 'comedy',
-    Crime = 'crime',
-    Documentary = 'documentary',
-    Drama = 'drama',
-    Horror = 'horror',
-    Family = 'family',
-    Romance = 'romance',
-    Scifi = 'scifi',
-    Thriller = 'thriller',
+  Comedy = 'comedy',
+  Crime = 'crime',
+  Documentary = 'documentary',
+  Drama = 'drama',
+  Horror = 'horror',
+  Family = 'family',
+  Romance = 'romance',
+  Scifi = 'scifi',
+  Thriller = 'thriller',
 }
 
 export const GENRE_ARRAY: string[] = [Genre.Comedy, Genre.Crime, Genre.Documentary, Genre.Drama, Genre.Family,

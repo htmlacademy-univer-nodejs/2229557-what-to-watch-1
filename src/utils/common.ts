@@ -1,8 +1,10 @@
-import { Film } from '../entities/film/film.js';
-import {getGenre} from '../models/genre.js';
 import * as crypto from 'crypto';
 import * as jose from 'jose';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
+
+import { Film } from '../models/film.js';
+import { getGenre } from '../models/genre.js';
+import { TextEncoder } from 'util';
 
 export const createFilm = (row: string) => {
   const tokens = row.replace('\n', '').split('\t');
@@ -63,4 +65,4 @@ export const createJWT = async (
     .setProtectedHeader({ alg: algoritm })
     .setIssuedAt()
     .setExpirationTime('2d')
-    .sign(crypto.createSecretKey(jwtSecret, 'utf-8'));
+    .sign(new TextEncoder().encode(jwtSecret));
