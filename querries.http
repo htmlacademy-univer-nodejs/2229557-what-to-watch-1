@@ -5,8 +5,8 @@ POST http://localhost:1234/users/register HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "test@amil.ru",
-  "avatarPath": "torrance.png",
+  "email": "test@mail.ru",
+  "avatar": "torrance.png",
   "firstname": "Jack",
   "lastname": "Torrance",
   "password": "shining"
@@ -20,7 +20,7 @@ POST http://localhost:1234/users/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "test@amil.ru",
+  "email": "test@mail.ru",
   "password": "123456"
 }
 
@@ -32,7 +32,7 @@ POST http://localhost:1234/users/logout HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "test@amil.ru"
+  "email": "test@mail.ru"
 }
 
 ###
@@ -50,7 +50,7 @@ Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0g
 
 POST http://localhost:1234/films/create HTTP/1.1
 Content-Type: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyIkX18iOnsiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsicGFzc3dvcmQiOiJpbml0IiwiZW1haWwiOiJpbml0IiwibmFtZSI6ImluaXQiLCJfaWQiOiJpbml0IiwiY3JlYXRlZEF0IjoiaW5pdCIsInVwZGF0ZWRBdCI6ImluaXQiLCJfX3YiOiJpbml0In0sInN0YXRlcyI6eyJyZXF1aXJlIjp7fSwiaW5pdCI6eyJfaWQiOnRydWUsIm5hbWUiOnRydWUsImVtYWlsIjp0cnVlLCJwYXNzd29yZCI6dHJ1ZSwiY3JlYXRlZEF0Ijp0cnVlLCJ1cGRhdGVkQXQiOnRydWUsIl9fdiI6dHJ1ZX19fSwic2tpcElkIjp0cnVlfSwiJGlzTmV3IjpmYWxzZSwiX2RvYyI6eyJfaWQiOiI2M2M2OTEzN2NiOWY3ODUxNWU1YzJkNGUiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBtYWlsLnJ1IiwicGFzc3dvcmQiOiIyMGVkZTM1YWIyYzUyNzRjYzFmZTc2OTU4ZGY0NTQ2Yzc4NmZlYTVjNTMxODJjNDMyNmM2MzI5Mjk0NzM5NDI0IiwiY3JlYXRlZEF0IjoiMjAyMy0wMS0xN1QxMjoxNDo0Ny40MzZaIiwidXBkYXRlZEF0IjoiMjAyMy0wMS0xN1QxMjoxNDo0Ny40MzZaIiwiX192IjowfSwiaWF0IjoxNjczOTU3Njk1LCJleHAiOjE2NzQxMzA0OTV9.IY8LtahgwqObT8EIm5e44SOoe8bXWW0Ad8LwcTc1YNc
 {
   "title": "Film",
   "description": "Film description",
@@ -75,7 +75,7 @@ Content-Type: application/json
 
 POST http://localhost:1234/films/update HTTP/1.1
 Content-Type: application/json
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyIkX18iOnsiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsicGFzc3dvcmQiOiJpbml0IiwiZW1haWwiOiJpbml0IiwibmFtZSI6ImluaXQiLCJfaWQiOiJpbml0IiwiY3JlYXRlZEF0IjoiaW5pdCIsInVwZGF0ZWRBdCI6ImluaXQiLCJfX3YiOiJpbml0In0sInN0YXRlcyI6eyJyZXF1aXJlIjp7fSwiaW5pdCI6eyJfaWQiOnRydWUsIm5hbWUiOnRydWUsImVtYWlsIjp0cnVlLCJwYXNzd29yZCI6dHJ1ZSwiY3JlYXRlZEF0Ijp0cnVlLCJ1cGRhdGVkQXQiOnRydWUsIl9fdiI6dHJ1ZX19fSwic2tpcElkIjp0cnVlfSwiJGlzTmV3IjpmYWxzZSwiX2RvYyI6eyJfaWQiOiI2M2M2OTEzN2NiOWY3ODUxNWU1YzJkNGUiLCJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEBtYWlsLnJ1IiwicGFzc3dvcmQiOiIyMGVkZTM1YWIyYzUyNzRjYzFmZTc2OTU4ZGY0NTQ2Yzc4NmZlYTVjNTMxODJjNDMyNmM2MzI5Mjk0NzM5NDI0IiwiY3JlYXRlZEF0IjoiMjAyMy0wMS0xN1QxMjoxNDo0Ny40MzZaIiwidXBkYXRlZEF0IjoiMjAyMy0wMS0xN1QxMjoxNDo0Ny40MzZaIiwiX192IjowfSwiaWF0IjoxNjczOTU3Njk1LCJleHAiOjE2NzQxMzA0OTV9.IY8LtahgwqObT8EIm5e44SOoe8bXWW0Ad8LwcTc1YNc
 {
   "id": "1",
   "title": "Film updated",
